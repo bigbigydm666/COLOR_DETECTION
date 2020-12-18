@@ -65,7 +65,7 @@ class Realsense
          
          case(2):
          
-            RGB_Sensor.set_option(rs2_option::RS2_OPTION_WHITE_BALANCE, 2800);
+            RGB_Sensor.set_option(rs2_option::RS2_OPTION_WHITE_BALANCE, 6500);
             break;
          
          case(3):
