@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 17:01:23
- * @LastEditTime: 2020-12-18 21:12:18
+ * @LastEditTime: 2020-12-19 09:01:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /RSDRIVER/main.cpp
@@ -16,7 +16,7 @@ using namespace std;
 using namespace rs2;
 
 
-
+#define Mode BLUE
 
 
 int main()
@@ -24,21 +24,34 @@ int main()
    vector<double> Poly3 = {-1.34330310272629e-12, 1.43114537288108e-07, -0.00559057589537007, 121.214140140806};
    vector<double> Poly2 = {0.00145491853262326, -0.864713874688413, 168.111430776990} ;
 
-   namedWindow("control", 1);
+   //namedWindow("control", 1);
    int hMax = 255, hMin = 136, sMax = 255, sMin = 0, vMax = 255, vMin = 0;
-   int canny1 = 0, canny2 = 127;
-   createTrackbar("hMax", "control", &hMax, 255);
+   switch(Mode)
+   {
+      case(1):
+         hMax = 255, hMin = 136;
+         break;
+      case(2):
+         hMax = 145, hMin = 70;
+         break;
+      default:
+         hMax = 0, hMin = 0;
+
+   }
+   //int canny1 = 0, canny2 = 127;
+   
+   /*createTrackbar("hMax", "control", &hMax, 255);
    createTrackbar("hMin", "control", &hMin, 255);
    createTrackbar("sMax", "control", &sMax, 255);
    createTrackbar("sMin", "control", &sMin, 255);
    createTrackbar("vMax", "control", &vMax, 255);
    createTrackbar("vMin", "control", &vMin, 255);
    createTrackbar("canny1", "control", &canny1, 255);
-   createTrackbar("canny2", "control", &canny2, 255);
+   createTrackbar("canny2", "control", &canny2, 255);*/
    Realsense d435;
    d435.setSize(1920, 1080);
    d435.init();
-   d435.setSensor(RED);
+   d435.setSensor(Mode);
    Mat src;
    Mat temp = imread("1.png", IMREAD_GRAYSCALE);
    vector<Mat> temp_contours;
@@ -48,16 +61,16 @@ int main()
       cerr<<"could not load image"<<endl;
       exit(1);
    }
-      vector<Vec3b> colors;  // 随机生成几种颜色
+      //vector<Vec3b> colors;  // 随机生成几种颜色
 		
 
-      for (int i = 0; i < 20; i++)
+     /* for (int i = 0; i < 20; i++)
 	   {
 	      int b = theRNG().uniform(0, 255);
 	      int g = theRNG().uniform(0, 255);
 	      int r = theRNG().uniform(0, 255);
 	      colors.push_back(Vec3b((uchar)b, (uchar)g, (uchar)r));
-	   }
+	   }*/
 
    while(true)
    {
@@ -70,7 +83,7 @@ int main()
       //得到roi
       Rect ROIRECT = Rect(d435.Width/2 - 150, d435.Height/2 - 150, 300, 300);
       Mat roisrc = src(ROIRECT);
-      rectangle(src, ROIRECT, Scalar(255, 255, 0));
+      rectangle(src, ROIRECT, Scalar(255, 255, 255));
       Mat kernel = getStructuringElement(MORPH_RECT, Size(9, 9));
       //在roi中进行特征提取
       
@@ -191,4 +204,6 @@ int main()
    }
    return 0;
 }
+
+
 
